@@ -1,13 +1,12 @@
 # ReboCopy Go+ Software Introduction
-Software Type: Freeware
 
 Language: Simplified Chinese
 
 Operating Environment: Windows 7 and above
  
-Alternative Download 1: https://wwdd.lanzouw.com/b03h8slnsf Extraction code: e6cl
+Alternative Download 1: https://wwdd.lanzouw.com/b03h8slnsf code: e6cl
 
-Alternative Download 2: https://pan.baidu.com/s/12AQ-qMnQVhNgh0DNbNR1SA?pwd=zgzg Extraction code: zgzg
+Alternative Download 2: https://pan.baidu.com/s/12AQ-qMnQVhNgh0DNbNR1SA?pwd=zgzg code: zgzg
 
 # What is ReboCopy Go+?
 ReboCopy Go+ is a graphical user interface (GUI) software developed based on Microsoft Windows' built-in command-line tool Robocopy.exe. Its primary purpose is to enable everyday users to easily utilize the powerful but complex functionalities of Robocopy.
