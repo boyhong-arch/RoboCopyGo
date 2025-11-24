@@ -25,8 +25,14 @@ Robocopy Go+ 可以看作是为系统自带Robocopy工具“穿上”了一件�
 # 交互界面
 ![0](https://github.com/user-attachments/assets/d8f33814-ea7e-4b76-b428-f472487094de)
 
+支持多开、多任务并行、硬盘复制模式选择等等：
+
 ![1](https://github.com/user-attachments/assets/651c771a-e5e9-4eef-8ae9-e5161289af99)
 
+若功能参数区域不小心调混乱了，可以：恢复初始化默认功能选项 ，还支持：拷贝完成后关机实现无人值守，有时候备份目录会被本机系统自带的杀毒软件误杀，也提供了一键式添加信任文件夹，当有一天你用不到这个软件了，也提供了卸载（可清除本软件在你电脑上留下的任何痕迹）功能，尤其支持了：外壳扩展：可添加到本机文件夹上的右键菜单里了：
+
 ![2](https://github.com/user-attachments/assets/60741dd9-3cf4-41b6-92dd-ef1f036a3171)
+
+将鼠标放置在功能参数上，会有功能文字解释，一般默认参数执行就可以了：
 
 ![4](https://github.com/user-attachments/assets/fa2b3d4e-cb73-4ce5-9753-46171290028b)
