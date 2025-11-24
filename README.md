@@ -3,7 +3,7 @@
  软件语言：简体中文
  运行环境：Windows7及以上
  
- 备用下载：https://wwdd.lanzouw.com/b03h8slnsf提取码:e6cl
+ 备用下载：https://wwdd.lanzouw.com/b03h8slnsf 提取码:e6cl
  
  备用下载: https://pan.baidu.com/s/12AQ-qMnQVhNgh0DNbNR1SA?pwd=zgzg 提取码: zgzg
 
