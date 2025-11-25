@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robocopy 命令及 RoboCopy Go+ 指南</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            text-align: center;
+        }
+        
+        .intro {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 15px;
+            padding-bottom: 7px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        h2 {
+            color: #764ba2;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        h3 {
+            color: #667eea;
+            font-size: 1.6rem;
+            margin: 25px 0 15px;
+        }
+        
+        h4 {
+            color: #5a6de0;
+            font-size: 1.3rem;
+            margin: 20px 0 10px;
+        }
+        
+        p {
+            margin-bottom: 18px;
+            text-align: justify;
+        }
+        
+        .comparison {
+            display: flex;
+            margin: 25px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .traditional, .robocopy {
+            flex: 1;
+            padding: 25px;
+        }
+        
+        .traditional {
+            background: #ffe8e8;
+            border-right: 1px solid #ffd0d0;
+        }
+        
+        .robocopy {
+            background: #e8f4ff;
+        }
+        
+        .traditional h4, .robocopy h4 {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed rgba(0,0,0,0.2);
+        }
+        
+        .command {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+            font-family: 'Consolas', 'Courier New', monospace;
+            overflow-x: auto;
+            font-size: 1rem;
+        }
+        
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .param-table th {
+            background: #764ba2;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .param-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .param-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .param-table tr:hover {
+            background: #f0f2ff;
+        }
+        
+        .param {
+            background: #f0f2f5;
+            padding: 12px 18px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 3px solid #764ba2;
+        }
+        
+        .example {
+            background: #eef5ff;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            border: 1px solid #d0e0ff;
+        }
+        
+        .example h4 {
+            color: #4a6eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .example h4:before {
+            content: "►";
+            margin-right: 10px;
+            color: #764ba2;
+        }
+        
+        .note {
+            background: #fff9e6;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .category {
+            flex: 1;
+            min-width: 200px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .category h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .tip {
+            background: #e7f7ef;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .comparison {
+                flex-direction: column;
+            }
+            
+            .traditional {
+                border-right: none;
+                border-bottom: 1px solid #ffd0d0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Robocopy 命令及 RoboCopy Go+</h1>
+            <p class="subtitle">Windows 可靠文件复制工具权威手册</p>
+            <p class="intro">Robocopy（Robust File Copy）本是微软提供的强大命令行文件复制工具，自 Windows Vista 起内置在系统中。它提供了比传统复制粘贴更强大的功能，特别适合大规模文件备份、同步和迁移任务。</p>
+        </header>
+        
+        <div class="content">
+		    <div class="section">
+                <h2>RoboCopy Go+</h2>
+				<p>RoboCopy Go+ 是微信公众号：ITer_Chat 的作者基于:robocopy命令行程序,全新原创设计的窗口程序,是完全可以脱离于DOS窗口进行日常使用的。</p>
+				<h4>RoboCopy Go+简介:</h4>
+				<p>RoboCopy Go+ 作者公众号(推荐关注)：<a href="https://mp.weixin.qq.com/s/ASWhiDVYIVMDSTcc_N6Yhw" target="_blank">谁的拷贝速度更快？FastCopy?RoboCopy Go+？简单对比测试了一下，结果意外。</a></p>
+                <p>RoboCopy Go+ 作者公众号(推荐关注)：<a href="https://mp.weixin.qq.com/s/f2aQABYQ_XrjRqLbFFLzRw" target="_blank">原创更新：我为RoboCopy画了个窗口（不比FastCopy差的一款多线程、可续传的拷贝工具）</a></p>
+            </div>
+            <div class="section">
+                <h2>Robocopy简介</h2>
+                <p>Robocopy（Robust File Copy）是微软在 Windows Server 2003 Resource Kit Tools 中提供的命令行程序，后来 Vista、Win7 等后续系统已经自带。与传统复制功能相比，Robocopy 提供了更强大的文件管理能力。</p>
+                
+                <div class="comparison">
+                    <div class="traditional">
+                        <h4>传统复制局限性</h4>
+                        <p>• 要么全有要么全无的复制方式</p>
+                        <p>• 大目录拷贝用时很长且不能中断</p>
+                        <p>• 不支持权限属性复制</p>
+                        <p>• 不支持增量备份</p>
+                        <p>• 无法过滤特定类型文件</p>
+                    </div>
+                    <div class="robocopy">
+                        <h4>Robocopy 优势</h4>
+                        <p>• 支持断点续传，复制可中断后继续</p>
+                        <p>• 保持文件权限、属性和时间戳</p>
+                        <p>• 支持镜像备份和增量备份</p>
+                        <p>• 可过滤文件类型和设置文件大小限制</p>
+                        <p>• 支持多线程复制，提高效率</p>
+                    </div>
+                </div>
+                
+                <div class="note">
+                    <p><strong>注意：</strong>Robocopy 是系统自带工具，无需额外购买商业软件许可，是替代同类商业软件的优秀选择。</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>基本语法</h2>
+                <div class="command">
+                    ROBOCOPY source destination [file [file]...] [options]
+                </div>
+                
+                <div class="param">
+                    <strong>源目录</strong> :: 源目录(驱动器:\路径或\\服务器\共享\路径)
+                </div>
+                
+                <div class="param">
+                    <strong>目标目录</strong> :: 目标目录(驱动器:\路径或\\服务器\共享\路径)
+                </div>
+                
+                <div class="param">
+                    <strong>文件</strong> :: 要复制的文件(名称/通配符: 默认为 "*.*")
+                </div>
+                
+                <div class="tip">
+                    <strong>提示：</strong>Robocopy 支持网络路径，可以直接复制到文件服务器共享文件夹。
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>参数详解</h2>
+                
+                <div class="categories">
+                    <div class="category">
+                        <h4>复制选项</h4>
+                        <p><strong>/S</strong> - 复制子目录，但不复制空的子目录</p>
+                        <p><strong>/E</strong> - 复制子目录，包括空的子目录</p>
+                        <p><strong>/LEV:n</strong> - 仅复制源目录树的前n层</p>
+                        <p><strong>/Z</strong> - 在可重新启动模式下复制文件</p>
+                        <p><strong>/B</strong> - 在备份模式下复制文件</p>
+                        <p><strong>/MT[:n]</strong> - 使用n个线程进行多线程复制</p>
+                    </div>
+                    
+                    <div class="category">
+                        <h4>文件选择</h4>
+                        <p><strong>/A</strong> - 仅复制具有存档属性集的文件</p>
+                        <p><strong>/M</strong> - 复制具有存档属性的文件并重置属性</p>
+                        <p><strong>/XF</strong> - 排除指定文件</p>
+                        <p><strong>/XD</strong> - 排除指定目录</p>
+                        <p><strong>/MAXAGE</strong> - 设置最大文件存在时间</p>
+                        <p><strong>/MINAGE</strong> - 设置最小文件存在时间</p>
+                    </div>
+                    
+                    <div class="category">
+                        <h4>高级功能</h4>
+                        <p><strong>/MIR</strong> - 镜像目录树(等同于 /E 加 /PURGE)</p>
+                        <p><strong>/MOV</strong> - 移动文件(复制后从源中删除)</p>
+                        <p><strong>/PURGE</strong> - 删除源中不存在的目标文件</p>
+                        <p><strong>/COPYALL</strong> - 复制所有文件信息</p>
+                        <p><strong>/MON</strong> - 监视源目录变化</p>
+                        <p><strong>/MOT</strong> - 按时间监视源目录</p>
+                    </div>
+                </div>
+                
+                <h3>常用参数组合</h3>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>参数组合</th>
+                            <th>功能描述</th>
+                            <th>适用场景</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>/E /COPYALL</strong></td>
+                            <td>完全复制所有子目录和文件信息</td>
+                            <td>完整备份，需要保留所有属性</td>
+                        </tr>
+                        <tr>
+                            <td><strong>/MIR</strong></td>
+                            <td>创建完全相同的镜像副本</td>
+                            <td>同步备份，保持源和目标一致</td>
+                        </tr>
+                        <tr>
+                            <td><strong>/S /Z</strong></td>
+                            <td>复制子目录(非空)并支持断点续传</td>
+                            <td>网络传输，可能中断的大文件复制</td>
+                        </tr>
+                        <tr>
+                            <td><strong>/E /MT:16</strong></td>
+                            <td>多线程复制所有子目录</td>
+                            <td>提高大数量文件复制速度</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2>实用示例</h2>
+                
+                <div class="example">
+                    <h4>实例一：选择性复制特定文件类型</h4>
+                    <div class="command">
+                        robocopy d:\work e:\back *.txt *.doc *.bmp *.tif /s
+                    </div>
+                    <p><strong>实现效果：</strong>将d:\work文件夹下的TXT、DOC、BMP、TIF文件复制到e:\back文件夹，包括非空子目录。</p>
+                    <p><strong>参数说明：</strong>/s表示复制子目录，但不复制空的子目录。</p>
+                    <p><strong>举一反三：</strong>如果要将所有文件包括空文件夹全部复制，使用命令：<span class="command">robocopy d:\work e:\back /e</span></p>
+                </div>
+                
+                <div class="example">
+                    <h4>实例二：排除垃圾文件</h4>
+                    <div class="command">
+                        robocopy d:\work e:\back /e /xf *.tmp *.bak
+                    </div>
+                    <p><strong>实现效果：</strong>复制所有文件但排除TMP和BAK垃圾文件。</p>
+                    <p><strong>参数说明：</strong>/xf为指定不执行复制操作的文件类型，后面的文件名支持通配符。</p>
+                </div>
+                
+                <div class="example">
+                    <h4>实例三：完全镜像备份</h4>
+                    <div class="command">
+                        robocopy d:\work e:\back /mir
+                    </div>
+                    <p><strong>实现效果：</strong>创建完全相同的镜像备份，删除目标文件夹中存在但源文件夹中没有的文件。</p>
+                    <p><strong>参数说明：</strong>/mir等同于/e和/purge，表示镜像目录树。</p>
+                </div>
+                
+                <div class="example">
+                    <h4>实例四：保留NTFS权限</h4>
+                    <div class="command">
+                        robocopy d:\work e:\back /e /copyall
+                    </div>
+                    <p><strong>实现效果：</strong>复制所有文件及NTFS权限、所有者等安全信息。</p>
+                    <p><strong>参数说明：</strong>/copyall表示复制所有文件信息(等同于/COPY:DATSOU)。</p>
+                </div>
+                
+                <div class="example">
+                    <h4>实例五：自动监控备份</h4>
+                    <div class="command">
+                        robocopy d:\work e:\back /e /copyall /mot:1 /mon:2
+                    </div>
+                    <p><strong>实现效果：</strong>监控源文件夹，当1分钟内发生2处以上修改时自动执行备份。</p>
+                    <p><strong>参数说明：</strong>/mot指定检查时间(分钟)，/mon指定最少修改文件数。</p>
+                </div>
+                
+                <div class="tip">
+                    <strong>高级技巧：</strong>可以将Robocopy命令保存为批处理文件(.bat)，然后通过Windows计划任务实现定时自动备份。
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>注意事项</h2>
+                <div class="note">
+                    <p>1. 使用 /PURGE 或 /MIR 时，Robocopy 将跳过"系统卷信息"目录</p>
+                    <p>2. 低可用空间模式与 /MT、/EFSRAW、/B 和/ZB 不兼容</p>
+                    <p>3. 多线程复制(/MT)与 /IPG 和 /EFSRAW 选项不兼容</p>
+                    <p>4. 使用 /LOG 选项重定向输出以便获得最佳性能</p>
+                    <p>5. 首次使用建议先使用 /L 参数试运行，只列出要执行的操作而不实际复制</p>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>以上robocopy命令行程序介绍参考文档：<a href=" https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy " target="_blank">Microsoft Robocopy 官方文档</a></p>
+		</footer>
+    </div>
+</body>
+</html>
